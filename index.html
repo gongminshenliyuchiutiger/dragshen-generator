@@ -669,7 +669,7 @@
 
     </div>
 
-    <!-- 版權信息 -->
+    <!-- 版權資訊 -->
     <footer class="mt-8 text-center text-gray-400 text-sm py-4">
         <p><!-- INSERT_GENERATED_COPYRIGHT_HTML_HERE --></p>
     </footer>
@@ -1300,26 +1300,6 @@
         // --- App Object: Encapsulates all logic ---
         const App = {
             CONFIG: {
-                // Lightweight pinyin converter for `sanitizeId`
-                // 此拼音映射用於生成內部 JavaScript 物件鍵（例如 `REN_SHENG_SHAN_YAO`），
-                // 與「預計打包為」顯示的檔案名稱（`人生山耀.svg` 或 `item001.png`）無關。
-                // 保留此段是為了確保內部物件鍵的命名規範和健壯性。
-                PINYIN_MAP: {
-                    '人': 'REN', '生': 'SHENG', '山': 'SHAN', '耀': 'YAO', '好': 'HAO', '野': 'YE',
-                    '將': 'JIANG', '發': 'FA', '蟹': 'XIE', '有': 'YOU', '您': 'NIN', '祥': 'XIANG',
-                    '旺': 'WANG', '來': 'LAI', '福': 'FU', '窯': 'YAO', '身': 'SHEN', '一': 'YI',
-                    '變': 'BIAN', '精': 'JING', '彩': 'CAI', '瞬': 'SHUN', '間': 'JIAN', '初': 'CHU',
-                    '級': 'JI', '挑': 'TIAO', '戰': 'ZHAN', '中': 'ZHONG', '考': 'KAO', '驗': 'YAN',
-                    '終': 'ZHONG', '極': 'JI', '捕': 'BU', '捉': 'ZHUO', '雙': 'SHUANG', '溪': 'XI',
-                    '臨': 'LIN', '門': 'MEN', '安': 'AN', '順': 'SHUN', '利': 'LI', '龍': 'LONG',
-                    '厚': 'HOU', '哩': 'LI', '奔': 'BEN', '跑': 'PAO', '弦': 'XIAN',
-                    '琴': 'QIN', '逸': 'YI', '致': 'ZHI', '轟': 'HONG', '隆': 'LONG', '蟲': 'CHONG',
-                    '平': 'PING', '安': 'AN', '所': 'SUO', '在': 'ZAI', '皆': 'JIE', '荷': 'HE',
-                    '正': 'ZHENG', '氣': 'QI', '看': 'KAN', '兩': 'LIANG', '不': 'BU', '厭': 'YAN',
-                    '漫': 'MAN', '遊': 'YOU', '神': 'SHEN', '系': 'XI', '統': 'TONG', '設': 'SHE',
-                    '定': 'DING', '的': 'DE', '遊': 'YOU', '戲': 'XI', '物': 'WU', '品': 'PIN',
-                    '名': 'MING', '稱': 'CHENG', '關': 'GUAN', '卡': 'KA'
-                },
                 THEMES: {
                     '現代黑藍': {
                         '--body-bg': 'linear-gradient(135deg, #1a1a2e 0%, #2a003f 100%)',
@@ -1982,24 +1962,9 @@
                 this.renderThemes(); // Re-render to update active state
                 this.state.generatedGameConfig = null; // Invalidate config on theme change
             },
-
-            _convertToPinyin(char) {
-                return this.CONFIG.PINYIN_MAP[char] || '';
-            },
-
+            
             _sanitizeId(name) {
-                let sanitized = '';
-                // First, try to convert Chinese characters to Pinyin
-                for (let i = 0; i < name.length; i++) {
-                    const char = name[i];
-                    const pinyin = this._convertToPinyin(char);
-                    if (pinyin) {
-                        sanitized += pinyin;
-                    } else if (/[a-zA-Z0-9_]/.test(char)) { // Preserve alphanumeric and underscore
-                        sanitized += char;
-                    }
-                }
-                sanitized = sanitized.toUpperCase().replace(/[^A-Z0-9_]/g, ''); // Ensure only valid chars for JS identifier
+                let sanitized = name.toUpperCase().replace(/[^A-Z0-9_]/g, ''); // 只保留英數字和底線，並轉大寫
 
                 // If still empty or too short, use a generic key based on a hash of the name
                 if (sanitized.trim() === '' || sanitized.length < 3) {
